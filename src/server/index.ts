@@ -24,12 +24,12 @@ const employees: Employee[] = [
     { id: 10, name: "Emma Rodriguez", designation: "Sales Representative", team: "Sales", managerId: 8 },
 ];
 
-// GET all employees
+// fetches all employees
 app.get("/api/employees", (cxt) => {
     return cxt.json(employees);
 });
 
-// POST a new employee
+// create a new employee
 app.post("/api/employee/new", async (cxt) => {
     const newEmployee: Employee = await cxt.req.json();
     newEmployee.id = employees.length + 1;
@@ -37,15 +37,15 @@ app.post("/api/employee/new", async (cxt) => {
     return cxt.json(newEmployee);
 });
 
-// PUT update an employee
-app.put("/api/employee/update", async (cxt) => {
+// update an employee
+app.post("/api/employee/update", async (cxt) => {
     const updatedEmployee: Employee = await cxt.req.json();
     const index = employees.findIndex((employee) => employee.id === updatedEmployee.id);
     if (index !== -1) {
         employees[index] = updatedEmployee;
         return cxt.json(updatedEmployee);
     } else {
-        return cxt.status(404);
+        return cxt.json({ error: "Employee not found" }, 404);
     }
 });
 

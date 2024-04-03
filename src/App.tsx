@@ -1,58 +1,50 @@
-import { Button } from "@/components/ui/button";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Employee } from "@/model/employee";
-import {
-    BriefcaseBusiness,
-    Building,
-    CircleUser,
-    Component,
-    FileBadge2,
-    Fingerprint,
-    Pencil,
-    Plus,
-    Search,
-} from "lucide-react";
+import { Building, ListFilter, Search } from "lucide-react";
 import React from "react";
 
+import EmployeeCreateDialog from "./components/custom/employee-create-dialog";
 import { EmployeeHoverCard } from "./components/custom/employee-hover-card";
-import { employeeFinder } from "./lib/common";
+import { Button } from "./components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "./components/ui/dropdown-menu";
 
 const App: React.FC = () => {
+    const [fetching, setFetching] = React.useState<boolean>(false);
     const [employees, setEmployees] = React.useState<Employee[]>([]);
+    const [filteredTeam, setFilteredTeam] = React.useState<string[]>([]);
     const [search, setSearch] = React.useState<string>("");
+
+    const filteringTeam = (team: string) => {
+        if (filteredTeam.includes(team)) {
+            setFilteredTeam(filteredTeam.filter((t) => t !== team));
+        } else {
+            setFilteredTeam([...filteredTeam, team]);
+        }
+    };
 
     React.useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch("http://192.168.0.175:3000/api/employees");
+            setFetching(true);
+            const response = await fetch("http://localhost:3000/api/employees");
             const data = await response.json();
             setEmployees(data);
+            const teams = data.map((employee: Employee) => employee.team);
+            setFilteredTeam(teams);
+            setFetching(false);
         };
         fetchData();
     }, []);
 
-    const handleAddEmployee = async () => {
-        const newEmployee: Employee = {
-            id: 0,
-            name: "John Doe",
-            designation: "Software Engineer",
-            team: "Engineering",
-            managerId: 1,
-        };
-
-        const response = await fetch("http://192.168.0.175:3000/api/employee/new", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newEmployee),
-        });
-        const data = await response.json();
-        if (data) {
-            const updatedEmployees = [...employees, data];
-            setEmployees(updatedEmployees);
-        }
-    };
+    React.useEffect(() => {
+        const teams = employees.map((employee) => employee.team);
+        setFilteredTeam(teams);
+    }, [employees]);
 
     return (
         <div className='grid min-h-screen w-full grid-cols-[300px_1fr] lg:grid-cols-[350px_1fr]'>
@@ -66,7 +58,7 @@ const App: React.FC = () => {
                     </div>
                     <div className='flex-1'>
                         <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
-                            <div className='relative mb-4 mt-2 flex w-full items-center gap-2'>
+                            <div className='relative my-2 flex w-full items-center gap-2'>
                                 <Search className='absolute left-2.5 top-3 h-4 w-4 text-muted-foreground' />
                                 <Input
                                     type='search'
@@ -75,37 +67,67 @@ const App: React.FC = () => {
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
-                                <Button
-                                    variant='outline'
-                                    size='icon'
-                                    className='ml-auto h-10 w-10'
-                                    onClick={handleAddEmployee}>
-                                    <Plus className='h-4 w-4' />
-                                    <span className='sr-only'>Add Employee</span>
-                                </Button>
+                                <EmployeeCreateDialog employees={employees} setEmployees={setEmployees} />
                             </div>
-                            {employees.length > 0 ? (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant='outline' size='sm' className='mb-2 h-8 gap-1'>
+                                        <ListFilter className='h-3.5 w-3.5' />
+                                        <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
+                                            Filter by Team
+                                        </span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align='center' className='w-80'>
+                                    {employees
+                                        .map((employee) => employee.team)
+                                        .filter((team, index, self) => self.indexOf(team) === index)
+                                        .map((team) => (
+                                            <DropdownMenuCheckboxItem
+                                                key={team}
+                                                onClick={() => filteringTeam(team)}
+                                                checked={filteredTeam.includes(team)}>
+                                                <DropdownMenuLabel>{team}</DropdownMenuLabel>
+                                            </DropdownMenuCheckboxItem>
+                                        ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            {fetching ? (
+                                <div className='mt-2 flex flex-col items-center gap-1 text-center'>
+                                    <p className='text-sm text-muted-foreground'>
+                                        Fetching employees... <br /> Please wait
+                                    </p>
+                                </div>
+                            ) : employees.length > 0 ? (
                                 employees.map((employee) => {
-                                    if (
-                                        employee.name.toLowerCase().includes(search.toLowerCase()) ||
-                                        employee.team.toLowerCase().includes(search.toLowerCase())
-                                    ) {
-                                        return (
-                                            <EmployeeHoverCard
-                                                employee={employee}
-                                                employees={employees}
-                                                key={employee.id}
-                                            />
-                                        );
+                                    if (filteredTeam.includes(employee.team)) {
+                                        if (
+                                            employee.name.toLowerCase().includes(search.toLowerCase()) ||
+                                            employee.team.toLowerCase().includes(search.toLowerCase())
+                                        ) {
+                                            return (
+                                                <EmployeeHoverCard
+                                                    key={employee.id}
+                                                    employee={employee}
+                                                    employees={employees}
+                                                    setEmployees={setEmployees}
+                                                />
+                                            );
+                                        }
                                     }
                                 })
                             ) : (
-                                <div className='flex flex-col items-center gap-1 text-center'>
-                                    <h3 className='text-2xl font-bold tracking-tight'>
-                                        You have no employee
-                                    </h3>
+                                <div className='mt-4 flex flex-col items-center gap-1 text-center'>
                                     <p className='text-sm text-muted-foreground'>
-                                        You can start by adding employees to your team
+                                        No employees found. <br /> Please add employees to your organization
+                                    </p>
+                                </div>
+                            )}
+                            {employees.length > 0 && filteredTeam.length === 0 && !fetching && (
+                                <div className='mt-2 flex flex-col items-center gap-1 text-center'>
+                                    <p className='text-sm text-muted-foreground'>
+                                        Please select a team to view employees
                                     </p>
                                 </div>
                             )}

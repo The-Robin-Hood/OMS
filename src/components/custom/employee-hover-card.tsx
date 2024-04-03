@@ -2,20 +2,37 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { employeeFinder } from "@/lib/common";
 import { Employee } from "@/model/employee";
 import { BriefcaseBusiness, CircleUser, Component, FileBadge2, Fingerprint, Pencil } from "lucide-react";
+import React, { useEffect } from "react";
 
 import { Button } from "../ui/button";
+import EmployeeUpdateDialog from "./employee-update-dialog";
 
-function EmployeeHoverCard({ employees, employee }: { employees: Employee[]; employee: Employee }) {
+function EmployeeHoverCard({
+    employees,
+    employee,
+    setEmployees,
+}: {
+    employees: Employee[];
+    employee: Employee;
+    setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
+}) {
+    const [open, setOpen] = React.useState<boolean>(false);
+    
     return (
-        <HoverCard>
+        <HoverCard open={open}>
             <HoverCardTrigger asChild>
-                <p className='group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary'>
+                <p
+                    className='group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary'
+                    onMouseEnter={() => setOpen(true)}
+                    onMouseLeave={() => setOpen(false)}>
                     <CircleUser className='h-4 w-4' />
                     {employee.name}
-                    <Button variant='ghost' size='icon' className='ml-auto hidden h-4 w-4 group-hover:block'>
-                        <Pencil className='h-4 w-4' />
-                        <span className='sr-only'>Toggle notifications</span>
-                    </Button>
+                    <EmployeeUpdateDialog
+                        employee={employee}
+                        employees={employees}
+                        setEmployees={setEmployees}
+                        setHoverCardOpen={setOpen}
+                    />
                 </p>
             </HoverCardTrigger>
             <HoverCardContent className='w-80' side='right' sideOffset={20}>
