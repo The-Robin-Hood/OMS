@@ -24,6 +24,8 @@ const employees: Employee[] = [
     { id: 10, name: "Emma Rodriguez", designation: "Sales Representative", team: "Sales", managerId: 8 },
 ];
 
+const copyEmployees = [...employees];
+
 // fetches all employees
 app.get("/api/employees", (cxt) => {
     return cxt.json(employees);
@@ -50,6 +52,12 @@ app.post("/api/employee/update", async (cxt) => {
     } else {
         return cxt.json({ error: "Employee not found" }, 404);
     }
+});
+
+// reset all employees to original data
+app.get("/api/employees/reset", (cxt) => {
+    employees.splice(0, employees.length, ...copyEmployees);
+    return cxt.json(employees);
 });
 
 export default app;

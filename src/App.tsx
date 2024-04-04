@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Employee } from "@/model/employee";
-import { Building, ListFilter, Search } from "lucide-react";
+import { Building, Github, ListFilter, Search } from "lucide-react";
 import React from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
@@ -30,6 +30,14 @@ const App: React.FC = () => {
         } else {
             setFilteredTeam([...filteredTeam, team]);
         }
+    };
+
+    const resetData = async () => {
+        const response = await fetch("http://localhost:3000/api/employees/reset");
+        const data = await response.json();
+        setEmployees(data);
+        const teams = data.map((employee: Employee) => employee.team);
+        setFilteredTeam(teams);
     };
 
     React.useEffect(() => {
@@ -141,8 +149,26 @@ const App: React.FC = () => {
             </div>
             <div className='flex flex-col'>
                 <main className='flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6'>
-                    <div className='flex items-center'>
+                    <div className='flex items-center justify-between'>
                         <h1 className='text-lg font-semibold md:text-2xl'>Employee Org Chart</h1>
+                        <div className='flex gap-5'>
+                            <Button variant='outline' className='ml-auto' onClick={resetData}>
+                                Reset
+                            </Button>
+                            <Button
+                                variant='outline'
+                                size='icon'
+                                className='ml-auto h-10 w-10'
+                                onClick={() =>
+                                    window.open(
+                                        "https://github.com/The-Robin-Hood/oms",
+                                        "_blank"
+                                    )
+                                }>
+                                <Github className='h-4 w-4' />
+                                <span className='sr-only'>Create Employee</span>
+                            </Button>
+                        </div>
                     </div>
                     <div className='flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm'>
                         <TransformWrapper
