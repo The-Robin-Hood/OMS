@@ -1,17 +1,13 @@
-import { DraggableContext } from "@/hooks/draggableProvider";
+import { DraggableContext } from "@/hooks/draggable-provider";
 import { isEmployeeUnderManager } from "@/lib/common";
 import { cn } from "@/lib/utils";
 import { Employee } from "@/model/employee";
+import { ExtendedEmployee } from "@/model/extended-employee";
 import { BriefcaseBusiness, Component } from "lucide-react";
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 
 import { useToast } from "../ui/use-toast";
-
-interface ExtendedEmployee extends Employee {
-    reporters: Employee[] | null;
-    depth: number;
-}
 
 function EmployeeNode({
     employees,

@@ -1,4 +1,8 @@
-import { calculateDepthOfEmployee, isEmployeeUnderAnyManagerInList } from "@/lib/common";
+import {
+    calculateDepthOfEmployee,
+    employeeToExtendedEmployee,
+    isEmployeeUnderAnyManagerInList,
+} from "@/lib/common";
 import { Employee } from "@/model/employee";
 import React from "react";
 import { DndProvider } from "react-dnd";
@@ -7,25 +11,6 @@ import { Tree, TreeNode } from "react-organizational-chart";
 
 import EmployeeNode from "./employee-node";
 
-interface ExtendedEmployee extends Employee {
-    reporters: Employee[] | null;
-    depth: number;
-}
-
-function addReportersToEmployees(employees: Employee[]) {
-    return employees.map(
-        (employee): ExtendedEmployee => ({
-            id: employee.id,
-            name: employee.name,
-            team: employee.team,
-            designation: employee.designation,
-            managerId: employee.managerId,
-            reporters: employees.filter((emp) => emp.managerId === employee.id),
-            depth: calculateDepthOfEmployee({ employees, employeeId: employee.id }),
-        })
-    );
-}
-
 const EmployeeTree = ({
     employees,
     setEmployees,
@@ -33,7 +18,7 @@ const EmployeeTree = ({
     employees: Employee[];
     setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
 }) => {
-    let rootEmployees = addReportersToEmployees(employees);
+    let rootEmployees = employeeToExtendedEmployee(employees);
     const renderTreeNodes = (managerId: number) => {
         const subordinates = rootEmployees.filter((emp) => emp.managerId === managerId);
         if (subordinates.length === 0) return null;
