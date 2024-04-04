@@ -19,6 +19,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useToast } from "../ui/use-toast";
+import { isEmployeeUnderManager } from "@/lib/common";
 
 function EmployeeUpdateDialog({
     employees,
@@ -54,6 +55,9 @@ function EmployeeUpdateDialog({
         newEmployee.id = employee.id;
         if (!newEmployee.managerId) {
             newEmployee.managerId = employee.managerId;
+        }
+        if (newEmployee.managerId === -1) {
+            newEmployee.managerId = null;
         }
         if (
             employee.name === newEmployee.name &&
@@ -157,9 +161,10 @@ function EmployeeUpdateDialog({
                                         <SelectValue placeholder='Select Employee' />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value={"-1"}>None</SelectItem>
                                         {employees.map((e) => {
+                                            if(isEmployeeUnderManager({ employees, employeeId: e.id, managerId: employee.id })) return null;
                                             if (e.id === employee.id) return null;
-                                            if(e.managerId === employee.id) return null;
                                             return (
                                                 <SelectItem key={e.id} value={e.id.toString()}>
                                                     {e.name}

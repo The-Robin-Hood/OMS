@@ -33,6 +33,9 @@ app.get("/api/employees", (cxt) => {
 app.post("/api/employee/new", async (cxt) => {
     const newEmployee: Employee = await cxt.req.json();
     newEmployee.id = employees.length + 1;
+    if(newEmployee.managerId === undefined) {
+        newEmployee.managerId = null;
+    }
     employees.push(newEmployee);
     return cxt.json(newEmployee);
 });

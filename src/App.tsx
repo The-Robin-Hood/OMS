@@ -2,9 +2,11 @@ import { Input } from "@/components/ui/input";
 import { Employee } from "@/model/employee";
 import { Building, ListFilter, Search } from "lucide-react";
 import React from "react";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 import EmployeeCreateDialog from "./components/custom/employee-create-dialog";
 import { EmployeeHoverCard } from "./components/custom/employee-hover-card";
+import EmployeeTree from "./components/custom/employee-tree";
 import { Button } from "./components/ui/button";
 import {
     DropdownMenu,
@@ -13,12 +15,14 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu";
+import DraggableProvider, { DraggableContext } from "./hooks/draggableProvider";
 
 const App: React.FC = () => {
     const [fetching, setFetching] = React.useState<boolean>(false);
     const [employees, setEmployees] = React.useState<Employee[]>([]);
     const [filteredTeam, setFilteredTeam] = React.useState<string[]>([]);
     const [search, setSearch] = React.useState<string>("");
+    const { dragging } = React.useContext(DraggableContext);
 
     const filteringTeam = (team: string) => {
         if (filteredTeam.includes(team)) {
@@ -141,12 +145,27 @@ const App: React.FC = () => {
                         <h1 className='text-lg font-semibold md:text-2xl'>Employee Org Chart</h1>
                     </div>
                     <div className='flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm'>
-                        <div className='flex flex-col items-center gap-1 text-center'>
-                            <h3 className='text-2xl font-bold tracking-tight'>You have no team</h3>
-                            <p className='text-sm text-muted-foreground'>
-                                You can start by adding employees to your team
-                            </p>
-                        </div>
+                        <TransformWrapper
+                            smooth
+                            limitToBounds={false}
+                            maxScale={2}
+                            minScale={0.5}
+                            initialPositionX={50}
+                            initialPositionY={100}
+                            disabled={dragging}>
+                            <TransformComponent contentClass='w-full' wrapperClass='w-full h-full'>
+                                <div className='flex flex-col items-center gap-1 text-center'>
+                                    <EmployeeTree
+                                        setEmployees={setEmployees}
+                                        employees={
+                                            filteredTeam.length > 0
+                                                ? employees.filter((emp) => filteredTeam.includes(emp.team))
+                                                : employees
+                                        }
+                                    />
+                                </div>
+                            </TransformComponent>
+                        </TransformWrapper>
                     </div>
                 </main>
             </div>
