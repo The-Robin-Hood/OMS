@@ -176,7 +176,7 @@ const App: React.FC = () => {
                             initialPositionX={50}
                             initialPositionY={100}
                             disabled={dragging}>
-                            <TransformComponent contentClass='w-full' wrapperClass='w-full h-full'>
+                            <TransformComponent contentClass='w-full' wrapperClass='!w-full !h-full'>
                                 <div className='flex flex-col items-center gap-1 text-center'>
                                     <EmployeeTree
                                         setEmployees={setEmployees}
