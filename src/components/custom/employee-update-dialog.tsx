@@ -1,7 +1,7 @@
+import { isEmployeeUnderManager } from "@/lib/common";
 import { cn } from "@/lib/utils";
 import { Employee } from "@/model/employee";
-import { Pencil, Plus } from "lucide-react";
-import { register } from "module";
+import { Pencil } from "lucide-react";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -19,7 +19,6 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useToast } from "../ui/use-toast";
-import { isEmployeeUnderManager } from "@/lib/common";
 
 function EmployeeUpdateDialog({
     employees,
@@ -47,6 +46,7 @@ function EmployeeUpdateDialog({
             setHoverCardOpen(false);
             reset();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [updateEmployeeModalOpen]);
 
     const { toast } = useToast();
@@ -163,7 +163,14 @@ function EmployeeUpdateDialog({
                                     <SelectContent>
                                         <SelectItem value={"-1"}>None</SelectItem>
                                         {employees.map((e) => {
-                                            if(isEmployeeUnderManager({ employees, employeeId: e.id, managerId: employee.id })) return null;
+                                            if (
+                                                isEmployeeUnderManager({
+                                                    employees,
+                                                    employeeId: e.id,
+                                                    managerId: employee.id,
+                                                })
+                                            )
+                                                return null;
                                             if (e.id === employee.id) return null;
                                             return (
                                                 <SelectItem key={e.id} value={e.id.toString()}>

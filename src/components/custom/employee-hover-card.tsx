@@ -1,10 +1,9 @@
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { employeeFinder } from "@/lib/common";
 import { Employee } from "@/model/employee";
-import { BriefcaseBusiness, CircleUser, Component, FileBadge2, Fingerprint, Pencil } from "lucide-react";
-import React, { useEffect } from "react";
+import { BriefcaseBusiness, CircleUser, Component, FileBadge2, Fingerprint } from "lucide-react";
+import React from "react";
 
-import { Button } from "../ui/button";
 import EmployeeUpdateDialog from "./employee-update-dialog";
 
 function EmployeeHoverCard({
@@ -17,7 +16,7 @@ function EmployeeHoverCard({
     setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
 }) {
     const [open, setOpen] = React.useState<boolean>(false);
-    
+
     return (
         <HoverCard open={open}>
             <HoverCardTrigger asChild>

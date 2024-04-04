@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Employee } from "@/model/employee";
 import { Plus } from "lucide-react";
-import { register } from "module";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -42,6 +41,7 @@ function EmployeeCreateDialog({
         if (!addEmployeeModalOpen) {
             reset();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [addEmployeeModalOpen]);
 
     const handleAddEmployee = async (newEmployee: Employee) => {

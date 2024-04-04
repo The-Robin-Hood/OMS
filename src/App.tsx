@@ -15,7 +15,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu";
-import DraggableProvider, { DraggableContext } from "./hooks/draggable-provider";
+import { DraggableContext } from "./hooks/draggable-provider";
 
 const App: React.FC = () => {
     const [fetching, setFetching] = React.useState<boolean>(false);

@@ -33,11 +33,11 @@ function isEmployeeUnderManagerInList({
     employees: Employee[];
     employeeId: number;
 }) {
-    let employee = employeeFinder({ employees, id: employeeId });
+    const employee = employeeFinder({ employees, id: employeeId });
     if (!employee) {
         return false;
     }
-    let managerIds = employees.map((emp) => emp.id);
+    const managerIds = employees.map((emp) => emp.id);
     if (managerIds.includes(employee!.managerId!)) {
         return true;
     }

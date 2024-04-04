@@ -1,8 +1,4 @@
-import {
-    calculateDepthOfEmployee,
-    employeeToExtendedEmployee,
-    isEmployeeUnderManagerInList,
-} from "@/lib/common";
+import { employeeToExtendedEmployee, isEmployeeUnderManagerInList } from "@/lib/common";
 import { Employee } from "@/model/employee";
 import React from "react";
 import { DndProvider } from "react-dnd";
@@ -18,7 +14,7 @@ const EmployeeTree = ({
     employees: Employee[];
     setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
 }) => {
-    let rootEmployees = employeeToExtendedEmployee(employees);
+    const rootEmployees = employeeToExtendedEmployee(employees);
     const renderTreeNodes = (managerId: number) => {
         const subordinates = rootEmployees.filter((emp) => emp.managerId === managerId);
         if (subordinates.length === 0) return null;
