@@ -26,7 +26,7 @@ function isEmployeeUnderManager({
 }
 
 // function to check if an employee is under any manager in a list
-function isEmployeeUnderAnyManagerInList({
+function isEmployeeUnderManagerInList({
     employees,
     employeeId,
 }: {
@@ -34,12 +34,12 @@ function isEmployeeUnderAnyManagerInList({
     employeeId: number;
 }) {
     let employee = employeeFinder({ employees, id: employeeId });
+    if (!employee) {
+        return false;
+    }
     let managerIds = employees.map((emp) => emp.id);
-    while (employee) {
-        if (managerIds.includes(employee.managerId!)) {
-            return true;
-        }
-        employee = employeeFinder({ employees, id: employee.managerId! });
+    if (managerIds.includes(employee!.managerId!)) {
+        return true;
     }
     return false;
 }
@@ -72,7 +72,7 @@ function employeeToExtendedEmployee(employees: Employee[]) {
 export {
     employeeFinder,
     isEmployeeUnderManager,
-    isEmployeeUnderAnyManagerInList,
+    isEmployeeUnderManagerInList,
     calculateDepthOfEmployee,
     employeeToExtendedEmployee,
 };
