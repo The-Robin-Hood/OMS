@@ -68,7 +68,7 @@ function EmployeeUpdateDialog({
             setUpdateEmployeeModalOpen(false);
             return;
         }
-        const response = await fetch("http://localhost:3000/api/employee/update", {
+        const response = await fetch(import.meta.env.VITE_BASE_URL + "/api/employee/update", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

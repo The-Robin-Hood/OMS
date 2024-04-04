@@ -45,7 +45,7 @@ function EmployeeCreateDialog({
     }, [addEmployeeModalOpen]);
 
     const handleAddEmployee = async (newEmployee: Employee) => {
-        const response = await fetch("http://localhost:3000/api/employee/new", {
+        const response = await fetch(import.meta.env.VITE_BASE_URL + "/api/employee/new", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

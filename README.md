@@ -23,13 +23,14 @@ OMS is a web-based application designed to manage organizational structures and 
 1. Clone the repository from GitHub: `git clone <repository-url>`
 2. Navigate to the project directory: `cd oms`
 3. Install dependencies: `bun install`
+4. Change the filename .env.example to .env
 
 ### Running the Application:
 
 1. Run the server: `bun run server`
 2. Run the client: `bun run client`
 3. Or you could simply run `bun dev`
-3. Access the application in your web browser at `http://localhost:3000`
+3. Access the application in your web browser at `http://localhost:5173`
 
 ### Usage:
 

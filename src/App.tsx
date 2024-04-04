@@ -33,7 +33,7 @@ const App: React.FC = () => {
     };
 
     const resetData = async () => {
-        const response = await fetch("http://localhost:3000/api/employees/reset");
+        const response = await fetch(import.meta.env.VITE_BASE_URL + "/api/employees/reset");
         const data = await response.json();
         setEmployees(data);
         const teams = data.map((employee: Employee) => employee.team);
@@ -43,7 +43,7 @@ const App: React.FC = () => {
     React.useEffect(() => {
         const fetchData = async () => {
             setFetching(true);
-            const response = await fetch("http://localhost:3000/api/employees");
+            const response = await fetch(import.meta.env.VITE_BASE_URL + "/api/employees");
             const data = await response.json();
             setEmployees(data);
             const teams = data.map((employee: Employee) => employee.team);
@@ -160,10 +160,7 @@ const App: React.FC = () => {
                                 size='icon'
                                 className='ml-auto h-10 w-10'
                                 onClick={() =>
-                                    window.open(
-                                        "https://github.com/The-Robin-Hood/oms",
-                                        "_blank"
-                                    )
+                                    window.open("https://github.com/The-Robin-Hood/oms", "_blank")
                                 }>
                                 <Github className='h-4 w-4' />
                                 <span className='sr-only'>Create Employee</span>
