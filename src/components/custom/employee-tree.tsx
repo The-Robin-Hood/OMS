@@ -1,7 +1,7 @@
 import {
     calculateDepthOfEmployee,
     employeeToExtendedEmployee,
-    isEmployeeUnderAnyManagerInList,
+    isEmployeeUnderManagerInList,
 } from "@/lib/common";
 import { Employee } from "@/model/employee";
 import React from "react";
@@ -49,7 +49,7 @@ const EmployeeTree = ({
                     lineBorderRadius='15px'>
                     {rootEmployees.map((root) => {
                         if (
-                            isEmployeeUnderAnyManagerInList({
+                            isEmployeeUnderManagerInList({
                                 employees: rootEmployees,
                                 employeeId: root.id,
                             })

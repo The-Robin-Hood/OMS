@@ -22,10 +22,9 @@ function EmployeeNode({
 
     async function handleDrop({ from, to }: { from: ExtendedEmployee; to: ExtendedEmployee }) {
         if (
-            (from.depth < to.depth &&
-                isEmployeeUnderManager({ employees, employeeId: from.id, managerId: to.id })) ||
+            from.id === to.id ||
             from.managerId === to.id ||
-            from.id === to.id
+            isEmployeeUnderManager({ employees, employeeId: to.id, managerId: from.id })
         )
             return;
         const newEmployee: Employee = {
