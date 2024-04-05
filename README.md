@@ -2,6 +2,8 @@
 
 OMS is a web-based application designed to manage organizational structures and employee information efficiently. It provides features to create, visualize, and manipulate the organizational hierarchy, as well as manage employee data.
 
+[Live Demo](https://o-m-s.vercel.app//)
+
 ### Features:
 
 1. **Employee Management**: Add, edit employee records, including details like name, designation, team, and manager.
@@ -20,7 +22,7 @@ OMS is a web-based application designed to manage organizational structures and 
 
 ### Installation:
 
-1. Clone the repository from GitHub: `git clone <repository-url>`
+1. Clone the repository from GitHub: `git clone https://github.com/The-Robin-Hood/oms.git`
 2. Navigate to the project directory: `cd oms`
 3. Install dependencies: `bun install`
 4. Change the filename .env.example to .env
@@ -46,9 +48,10 @@ OMS is a web-based application designed to manage organizational structures and 
 - **React**: Frontend library for building user interfaces.
 - **React DnD**: Drag and drop library for React.
 - **React Organizational Chart**: Component library for building organizational charts.
-- **Tailwind CSS**: Utility-first CSS framework for styling.
-- **Vite**: Next-generation frontend build tool.
+- **Tailwind CSS**: CSS framework for styling.
+- **Vite**: Frontend build tool.
 - **Bun**: Development server for running the application.
+- **TypeScript**: Typed superset of JavaScript.
 
 ### Development:
 
